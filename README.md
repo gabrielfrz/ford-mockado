@@ -1,5 +1,9 @@
 # D&R Engineering Dashboard — demonstração local
 
+Base atualizada: backend `fix/dpa5-program-filter-snapshot` (`6bcd7ae`) e frontend `develop` (`f24ae41`), de 31/08/2026. Queries BigQuery e scripts originais foram recuperados e preservados; a execução local continua com dados sintéticos.
+
+**[Panorama completo de dados, queries, alimentação e guia para Mac](docs/PANORAMA-DADOS.md)** — inclui um catálogo automático de SQL com links para a função de origem. [Manifesto da importação](docs/SOURCE-VERSIONS.json).
+
 Case de dashboard de engenharia com **Angular + FastAPI**, preservando o layout, logo, fonte e organização `front/` e `back/` do projeto original. Todos os registros exibidos nesta versão são fictícios. A autenticação institucional foi retirada; BigQuery e o banco original não são acessados.
 
 ## Rodar em localhost
@@ -50,7 +54,7 @@ pnpm start --host 127.0.0.1
 
 ```bash
 cd back
-.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python -m unittest discover -s tests -p test_demo.py -v
 cd ../front/dandr-web
 pnpm build
 ```

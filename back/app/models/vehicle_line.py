@@ -1,21 +1,18 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+"""SQLAlchemy model for vehicle-line program records."""
+
+from sqlalchemy import Column, Integer, String, ForeignKey
 from app.core.database import Base
 
 class VehicleLine(Base):
-    __tablename__ = "vehicle_lines"
+    """Persist vehicle-line metadata linked to an Effective Point."""
+
+    __tablename__ = "vehicle_line"
 
     id = Column(Integer, primary_key=True, index=True)
-    program_code = Column(String, index=True)
-    model_year = Column(Integer)
-    program_name = Column(String, index=True)
-    vehicle_line = Column(String)
-    affected_plant = Column(String)
-    plant_code = Column(String)
-    summary = Column(String)
-    effective_point = relationship(
-        "EffectivePoint",
-        back_populates="vehicle_line",
-        uselist=False,
-        cascade="all, delete-orphan"
-    )
+    program_code = Column(String, nullable=False)
+    model_year = Column(Integer, nullable=False)
+    vehicle_line = Column(String, nullable=False)
+    affected_plant = Column(String, nullable=False)
+    plant_code = Column(String, nullable=False)
+
+    id_effective_point = Column(Integer, ForeignKey("effective_point.id"))

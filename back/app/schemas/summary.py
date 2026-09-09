@@ -1,15 +1,14 @@
+"""Pydantic response schema for dashboard summaries."""
+
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional, Dict
 
-class KeyData(BaseModel):
-    event: str
-    date: str
+class SummarySchema(BaseModel):
+    """Serialize the high-level vehicle and Effective Point summary."""
 
-class VehicleLineSummary(BaseModel):
-    vehicle_line: str  
-    affected_plant: str 
-    plant_code: str  
-    key_datas: Optional[List[KeyData]] = None
+    vehicle_line: str
+    affected_plant: str
+    plant_code: str
+    effective_point: Dict[str, str]
 
     model_config = {"from_attributes": True}
-

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+﻿import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FedeStatusService } from '../../../services/fede-status.service';
 import { MetricCardData } from '../../../shared/components/metrics-chart-module';
 import { DonutMetricsChartComponent, DonutLegendItem } from '../../../shared/components/donut-metrics-chart';

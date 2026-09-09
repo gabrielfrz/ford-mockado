@@ -212,9 +212,7 @@ export class Home {
     return this.canExtractCurrentChart ? 'Extract Data' : `Extract ${this.activeChart.toUpperCase()} (Soon)`;
   }
 
-  get userName(): string {
-    return 'Demo Visitor';
-  }
+  get userName(): string { return 'Demo Visitor'; }
 
   constructor(
     private service: VehicleLineService,

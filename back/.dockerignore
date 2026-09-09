@@ -1,0 +1,70 @@
+# Version control and editor metadata
+
+.git
+.gitignore
+.gitattributes
+.github
+.vscode
+.idea
+
+# Local Python environments and caches
+
+.venv
+env
+venv
+ENV
+**/.venv
+**/env
+**/venv
+**/**pycache**
+**/\*.py[cod]
+**/\*$py.class
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+coverage.xml
+htmlcov
+
+# Local configuration, credentials, keys, and certificates
+
+.env
+.env._
+**/.env
+**/.env._
+.gcloud
+**/.gcloud
+**/_credential_.json
+**/_service-account_.json
+**/_service_account_.json
+**/application_default_credentials.json
+**/adc.json
+**/\*.pem
+**/_.key
+\*\*/_.p12 \*_/_.pfx
+
+# Runtime artifacts and local databases
+
+logs
+**/logs
+**/_.log
+\*\*/_.db
+**/\*.sqlite
+**/\*.sqlite3
+
+# Development-only material
+
+app/test\_\*.py
+tests
+\*\*/tests
+examples
+README.md
+
+# Local data is refreshed in BigQuery and is not embedded in the image
+
+data
+
+# Container build metadata is not part of the resulting filesystem
+
+Dockerfile
+.dockerignore
