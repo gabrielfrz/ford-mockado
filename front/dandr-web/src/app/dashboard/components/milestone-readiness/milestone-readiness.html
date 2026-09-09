@@ -1,0 +1,67 @@
+<div class="milestone-readiness-card">
+
+  <!-- LOADING STATE -->
+  <div class="mr-loading" *ngIf="isLoading">
+    <div class="mr-spinner"></div>
+    <span class="mr-loading-text">Loading target data...</span>
+  </div>
+
+  <!-- ERROR STATE (404 or 500) -->
+  <div class="mr-empty mr-error" *ngIf="errorMessage && !isLoading">
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- NO MILESTONE SELECTED (initial state) -->
+  <div class="mr-empty" *ngIf="!apiResponse && !errorMessage && !isLoading">
+    <span>Select a milestone on the timeline to view targets.</span>
+  </div>
+
+  <!-- DATA STATE -->
+  <ng-container *ngIf="apiResponse && !isLoading">
+
+    <!-- TARGET CARD -->
+    <div class="target-card" *ngIf="currentTarget; else noTarget">
+
+      <div class="target-header">
+        <span class="milestone-badge">{{ apiResponse.milestone }}</span>
+        <h3 class="target-title">{{ currentTarget.source }} Target</h3>
+      </div>
+
+      <div class="target-body">
+        <div class="target-stats">
+          <!-- <div class="stat-item">
+            <label>Status</label>
+            <span class="stat-value">{{ currentTarget.actual }} / {{ currentTarget.target }}</span>
+          </div> -->
+          <div class="stat-item">
+            <label>Achievement</label>
+            <span class="stat-value" [ngClass]="'color-' + currentTarget.status.toLowerCase()">
+              {{ currentTarget.percentage }}%
+            </span>
+          </div>
+        </div>
+
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            [style.width.%]="currentTarget.percentage"
+            [ngClass]="'color-' + currentTarget.status.toLowerCase()">
+          </div>
+        </div>
+      </div>
+
+      <div class="target-footer">
+        <span>Target Date: {{ apiResponse.milestone_date | date:'dd/MM/yyyy' }}</span>
+      </div>
+
+    </div>
+
+    <!-- NO TARGET FOR THIS SCREEN -->
+    <ng-template #noTarget>
+      <div class="empty-target">
+        No specific targets defined for <strong>{{ apiResponse.milestone }}</strong> in this section.
+      </div>
+    </ng-template>
+
+  </ng-container>
+</div>

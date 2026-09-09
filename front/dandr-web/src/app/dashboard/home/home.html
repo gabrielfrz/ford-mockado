@@ -1,0 +1,603 @@
+<div class="home-container">
+  <main class="content" [class.processed]="hasValidSummary">
+    <div class="page-header">
+      <h1>D&R View</h1>
+      <div class="page-header-user" [title]="userName">{{ userName }}</div>
+    </div>
+
+    <!-- FILTERS BAR - Always visible below page header -->
+    <div class="filters-bar">
+      <div class="search-form">
+        <div class="form-group">
+          <label>Model Year <span class="required-asterisk">*</span></label>
+          <div class="autocomplete">
+            <p-autoComplete
+              [forceSelection]="false"
+              [(ngModel)]="modelYear"
+              name="modelYear"
+              [suggestions]="filteredModelYears"
+              (completeMethod)="filterModelYears($event)"
+              field="label"
+              [dropdown]="true"
+              placeholder="Type the year"
+              panelStyleClass="autocomplete-panel-debug"
+              itemStyleClass="autocomplete-item-debug"
+              styleClass="filter-autocomplete"
+            ></p-autoComplete>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Program Code <span class="required-asterisk">*</span></label>
+          <div class="autocomplete">
+            <p-autoComplete
+              [forceSelection]="false"
+              [(ngModel)]="programCode"
+              name="programCode"
+              [suggestions]="filteredProgramCodes"
+              (completeMethod)="filterProgramCodes($event)"
+              field="label"
+              [dropdown]="true"
+              placeholder="Type the program code"
+              panelStyleClass="autocomplete-panel-debug"
+              itemStyleClass="autocomplete-item-debug"
+              styleClass="filter-autocomplete"
+            ></p-autoComplete>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Program Name <span class="optional-text">(optional)</span></label>
+          <div class="autocomplete">
+            <p-autoComplete
+              [forceSelection]="false"
+              [(ngModel)]="programName"
+              name="programName"
+              [suggestions]="filteredProgramNames"
+              (completeMethod)="filterProgramNames($event)"
+              field="label"
+              [dropdown]="true"
+              placeholder="Type the program name"
+              panelStyleClass="autocomplete-panel-debug"
+              itemStyleClass="autocomplete-item-debug"
+              styleClass="filter-autocomplete"
+            ></p-autoComplete>
+          </div>
+        </div>
+
+        <div class="filters-buttons">
+          <button type="submit" class="button button-search" (click)="submitForm()"
+            [disabled]="!modelYear || !programCode">
+            Search
+          </button>
+          <button type="button" class="button button-clean" (click)="clearFilters()"
+            [disabled]="!modelYear && !programName && !programCode">
+            Clean
+          </button>
+        </div>
+      </div>
+
+      <div class="extract-button-container">
+        <app-extract-button
+          [endpointUrl]="currentExtractEndpointUrl"
+          [fileName]="currentExtractFileName"
+          [params]="currentExtractParams"
+          [isEnabled]="canExtractCurrentChart"
+          [buttonLabel]="currentExtractLabel"
+        ></app-extract-button>
+      </div>
+    </div>
+
+    <div class="search-and-summary-container">
+
+      <!-- LOADING OVERLAY -->
+      <div class="loading-overlay" *ngIf="isLoadingData">
+        <div class="loading-spinner-container">
+          <div class="spinner"></div>
+          <p class="loading-text">Loading data...</p>
+          <p class="loading-subtext">Please wait while we fetch your data</p>
+        </div>
+      </div>
+
+      <!-- EMPTY STATE MESSAGE -->
+      <div class="empty-state-container" *ngIf="!hasValidSummary && !isLoadingData">
+        <div class="empty-state-box">
+          <p class="empty-state-description">Please fill in the required fields above and click the <strong>Search</strong> button to load vehicle data</p>
+        </div>
+      </div>
+
+      <ng-container *ngIf="!hasValidSummary && !isLoadingData">
+        <!-- centered filters when no search performed - HIDDEN -->
+        <div class="centered-filters" style="display: none;">
+          <div class="search-form">
+            <div class="form-group">
+              <label>Model Year</label>
+              <div class="autocomplete">
+                <p-autoComplete
+                  [forceSelection]="false"
+                  [(ngModel)]="modelYear"
+                  name="modelYear"
+                  [suggestions]="filteredModelYears"
+                  (completeMethod)="filterModelYears($event)"
+                  field="label"
+                  [dropdown]="true"
+                  placeholder="Type the year"
+                  panelStyleClass="autocomplete-panel-debug"
+                  itemStyleClass="autocomplete-item-debug"
+                ></p-autoComplete>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Program Name</label>
+              <div class="autocomplete">
+                <p-autoComplete
+                  [forceSelection]="false"
+                  [(ngModel)]="programName"
+                  name="programName"
+                  [suggestions]="filteredProgramNames"
+                  (completeMethod)="filterProgramNames($event)"
+                  field="label"
+                  [dropdown]="true"
+                  placeholder="Type the program name"
+                  panelStyleClass="autocomplete-panel-debug"
+                  itemStyleClass="autocomplete-item-debug"
+                ></p-autoComplete>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Program Code</label>
+              <div class="autocomplete">
+                <p-autoComplete
+                  [forceSelection]="false"
+                  [(ngModel)]="programCode"
+                  name="programCode"
+                  [suggestions]="filteredProgramCodes"
+                  (completeMethod)="filterProgramCodes($event)"
+                  field="label"
+                  [dropdown]="true"
+                  placeholder="Type the program code"
+                  panelStyleClass="autocomplete-panel-debug"
+                  itemStyleClass="autocomplete-item-debug"
+                ></p-autoComplete>
+              </div>
+            </div>
+
+            <button type="submit" class="button" (click)="submitForm()">Search</button>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="hasValidSummary">
+        <!-- Grid Container -->
+        <div class="dashboard-grid">
+
+          <!-- DVP STATUS SECTION (TOPO) -->
+          <div class="dvp-status-section" *ngIf="hasValidSummary && activeChart === 'dvp'">
+            <!-- Header: Title + Selector (Outside Container) -->
+            <div class="dvp-header">
+              <div class="dvp-title-group">
+                <h2 class="dvp-title">DVP STATUS</h2>
+                <div class="dvp-view-toggle">
+                  <button
+                    class="toggle-btn"
+                    [class.active]="dvpView === 'assessment'"
+                    (click)="setDvpView('assessment')">
+                    Assessment
+                  </button>
+                  <button
+                    class="toggle-btn"
+                    [class.active]="dvpView === 'classification'"
+                    (click)="setDvpView('classification')">
+                    Classification
+                  </button>
+                </div>
+              </div>
+
+              <div class="dvp-selector" *ngIf="dvpView === 'assessment'">
+                <label for="dvp-team-select">Select DVP Team:</label>
+                <select
+                  id="dvp-team-select"
+                  [(ngModel)]="selectedDvpTeam"
+                  (change)="onDvpTeamChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; Total Assessments</option>
+                  <option *ngFor="let team of availableDvpTeams" [value]="team">
+                    {{ team }}
+                  </option>
+                </select>
+              </div>
+              <div class="dvp-selector" *ngIf="dvpView === 'classification'">
+                <label for="dvp-cpsc-select">Select CPSC:</label>
+                <select
+                  id="dvp-cpsc-select"
+                  [(ngModel)]="selectedDvpCpsc"
+                  (ngModelChange)="updateDvpChart($event)"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; Select a CPSC</option>
+                  <option *ngFor="let cpsc of availableDrCpscCodes" [value]="cpsc">
+                    {{ cpsc }}
+                  </option>
+                </select>
+              </div>
+              <div class="dvp-selector" *ngIf="dvpGlidepathPmtList.length > 0">
+                <label for="dvp-pmt-select">Glidepath PMT:</label>
+                <select
+                  id="dvp-pmt-select"
+                  [(ngModel)]="selectedDvpPmt"
+                  (change)="onDvpPmtChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; All PMTs</option>
+                  <option *ngFor="let pmt of dvpGlidepathPmtList" [value]="pmt">{{ pmt }}</option>
+                </select>
+              </div>
+              <div class="dvp-selector" *ngIf="dvpGlidepathMilestoneList.length > 0">
+                <label for="dvp-milestone-select">Glidepath Milestone:</label>
+                <select
+                  id="dvp-milestone-select"
+                  [(ngModel)]="selectedDvpMilestone"
+                  (change)="onDvpMilestoneChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; All Milestones</option>
+                  <option *ngFor="let ms of dvpGlidepathMilestoneList" [value]="ms">{{ ms }}</option>
+                </select>
+              </div>
+              <div class="dvp-selector" *ngIf="availableDvpSnapshotDates.length > 0">
+                <label for="dvp-snapshot-select">Snapshot Date:</label>
+                <select
+                  id="dvp-snapshot-select"
+                  [(ngModel)]="selectedDvpSnapshotDate"
+                  (change)="onDvpSnapshotChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; Latest Data</option>
+                  <option *ngFor="let date of availableDvpSnapshotDates" [value]="date">{{ date }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="dvp-metrics-section">
+              <p class="dvp-view-label">DVP {{ dvpView === 'assessment' ? 'Assessment' : 'Classification' }}</p>
+              <app-dvp-total
+                *ngIf="dvpView === 'assessment'"
+                [giCode]="summaryData?.gi_code"
+                [selectedDvpTeam]="selectedDvpTeam"
+                [selectedPmt]="selectedCostsPmt"
+                [snapshotDate]="selectedDvpSnapshotDate">
+              </app-dvp-total>
+              <app-dvp-classification
+                *ngIf="dvpView === 'classification'"
+                [giCode]="summaryData?.gi_code"
+                [selectedDvpTeam]="selectedDvpTeam"
+                [selectedCpsc]="selectedDvpCpsc"
+                [selectedPmt]="selectedCostsPmt"
+                [snapshotDate]="selectedDvpSnapshotDate">
+              </app-dvp-classification>
+            </div>
+
+            <!-- DVP GLIDEPATH CONTAINER -->
+            <app-dvp-glidepath
+              [giCode]="summaryData?.gi_code"
+              [selectedPmt]="selectedDvpPmt"
+              [selectedMilestone]="selectedDvpMilestone"
+              [snapshotDate]="selectedDvpSnapshotDate"
+              (pmtListChanged)="onDvpGlidepathPmtListChanged($event)"
+              (milestoneListChanged)="onDvpGlidepathMilestoneListChanged($event)">
+            </app-dvp-glidepath>
+          </div>
+
+          <!-- HIR STATUS SECTION -->
+          <div class="hir-status-section" *ngIf="hasValidSummary && activeChart === 'hir'">
+            <!-- Header: Title + Selectors (Outside Container) -->
+            <div class="hir-header">
+              <h2 class="hir-title">HIR STATUS</h2>
+              <div class="hir-selectors">
+                <div class="hir-selector">
+                  <label for="hir-commodity-select">Select Commodity:</label>
+                  <select
+                    id="hir-commodity-select"
+                    [(ngModel)]="selectedProgram"
+                    (change)="onProgramChange()"
+                    class="selector"
+                  >
+                    <option [value]="null">&#9654; All Commodities</option>
+                    <option *ngFor="let prog of availablePrograms" [value]="prog">
+                      {{ prog }}
+                    </option>
+                  </select>
+                </div>
+                <div class="hir-selector" *ngIf="selectedProgram">
+                  <label for="hir-dvp-team-select">Select DVP Team:</label>
+                  <select
+                    id="hir-dvp-team-select"
+                    [(ngModel)]="selectedHirDvpTeam"
+                    (change)="onHirDvpTeamChange()"
+                    class="selector"
+                  >
+                    <option [value]="null">&#9654; All Teams</option>
+                    <option *ngFor="let team of availableHirDvpTeams" [value]="team">
+                      {{ team }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Single unified container -->
+            <div class="hir-metrics-section">
+              <app-hir-metrics
+                [giCode]="summaryData?.gi_code"
+                [selectedProgram]="selectedProgram"
+                [selectedDvpTeam]="selectedHirDvpTeam"
+                [selectedPmt]="selectedCostsPmt">
+              </app-hir-metrics>
+            </div>
+          </div>
+
+          <!-- CAE STATUS SECTION -->
+          <div class="cae-status-section" *ngIf="hasValidSummary && activeChart === 'cae'">
+            <!-- Header: Title + Selector (Outside Container) -->
+            <div class="cae-header">
+              <h2 class="cae-title">CAE STATUS</h2>
+              <div class="cae-selector">
+                <label for="cae-commodity-select">Select Commodity:</label>
+                <select
+                  id="cae-commodity-select"
+                  [(ngModel)]="selectedProgram"
+                  (change)="onProgramChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; All Commodities</option>
+                  <option *ngFor="let prog of availablePrograms" [value]="prog">
+                    {{ prog }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Single unified container -->
+            <div class="cae-metrics-section">
+              <app-cae-metrics
+                [giCode]="summaryData?.gi_code"
+                [selectedProgram]="selectedProgram"
+                [selectedPmt]="selectedCostsPmt">
+              </app-cae-metrics>
+            </div>
+
+          </div>
+
+          <!-- DPA5 STATUS SECTION -->
+          <div class="dpa5-status-section" *ngIf="hasValidSummary && activeChart === 'dpa5'">
+            <!-- Header: Title + Commodity select -->
+            <div class="dpa5-header">
+              <h2 class="dpa5-title">DPA5 STATUS</h2>
+              <div class="dpa5-selector" *ngIf="selectedDpa5Pmt && availableDpa5Cpscs.length">
+                <label for="dpa5-cpsc-select">Select Commodity:</label>
+                <select
+                  id="dpa5-cpsc-select"
+                  [(ngModel)]="selectedDpa5Cpsc"
+                  (change)="onDpa5CpscChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; All Commodities</option>
+                  <option *ngFor="let cpsc of availableDpa5Cpscs" [value]="cpsc">{{ cpsc }}</option>
+                </select>
+              </div>
+              <div class="dpa5-selector" *ngIf="availableDpa5SnapshotDates.length > 0">
+                <label for="dpa5-snapshot-select">Snapshot Date:</label>
+                <select
+                  id="dpa5-snapshot-select"
+                  [(ngModel)]="selectedDpa5SnapshotDate"
+                  (change)="onDpa5SnapshotChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; Latest Data</option>
+                  <option *ngFor="let date of availableDpa5SnapshotDates" [value]="date">{{ date }}</option>
+                </select>
+              </div>
+              <span *ngIf="selectedDpa5Pmt && isLoadingDpa5Cpscs" class="pmt-badge">Loading commodities…</span>
+            </div>
+
+            <!-- PMT required warning (mirrors costs page behaviour) -->
+            <div *ngIf="!selectedDpa5Pmt" class="pmt-required-warning">
+              <div class="pmt-required-icon">⚠</div>
+              <p class="pmt-required-title">PMT Selection Required</p>
+              <p class="pmt-required-sub">Please select a PMT code in the sidebar to view DPA5 data.</p>
+            </div>
+
+            <!-- Two separate containers rendered by the component -->
+            <app-dpa5-metrics
+              *ngIf="selectedDpa5Pmt"
+              [giCode]="summaryData?.gi_code"
+              [selectedProgram]="selectedDpa5Cpsc"
+              [selectedPmt]="selectedDpa5Pmt"
+              [selectedCpsc]="selectedDpa5Cpsc"
+              [snapshotDate]="selectedDpa5SnapshotDate">
+            </app-dpa5-metrics>
+          </div>
+
+          <!-- COSTS STATUS SECTION -->
+          <div class="costs-status-section" *ngIf="hasValidSummary && activeChart === 'costs'">
+            <!-- Header: Title + Toggle Tabs (Outside Container) -->
+            <div class="dvp-header">
+              <div class="dvp-title-group">
+                <h2 class="dvp-title">COSTS STATUS</h2>
+                <div class="dvp-view-toggle">
+                  <button
+                    class="toggle-btn"
+                    [class.active]="costsView === 'pieces'"
+                    (click)="setCostsView('pieces')">
+                    Pieces
+                  </button>
+                  <button
+                    class="toggle-btn"
+                    [class.active]="costsView === 'tooling'"
+                    (click)="setCostsView('tooling')">
+                    Tooling
+                  </button>
+                </div>
+              </div>            </div><!-- end dvp-header -->
+            <div class="costs-metrics-section">
+              <app-costs-status
+                [giCode]="summaryData?.parsed?.effective_point"
+                [activeTab]="costsView"
+                [selectedPmt]="selectedCostsPmt">
+              </app-costs-status>
+            </div>
+          </div>
+
+          <!-- DR STATUS SECTION -->
+          <div class="dr-status-section" *ngIf="hasValidSummary && activeChart === 'designRules'">
+
+            <!-- Header: Title + Toggle + Select -->
+            <div class="dvp-header">
+              <div class="dvp-title-group">
+                <h2 class="dvp-title">DESIGN RULES STATUS</h2>
+                <div class="dvp-view-toggle">
+                  <button
+                    class="toggle-btn"
+                    [class.active]="drView === 'evidences'"
+                    (click)="drView = 'evidences'">
+                    Evidences
+                  </button>
+                  <button
+                    class="toggle-btn"
+                    [class.active]="drView === 'classification'"
+                    (click)="drView = 'classification'">
+                    Classification
+                  </button>
+                </div>
+              </div>
+
+              <div class="dvp-selector">
+                <label for="dr-commodity-select">Select Commodity:</label>
+                <select
+                  id="dr-commodity-select"
+                  [(ngModel)]="selectedDrCommodity"
+                  (change)="onDrCommodityChange()"
+                  class="selector"
+                >
+                  <option [value]="null">&#9654; All Commodities</option>
+                  <option *ngFor="let cpsc of availableDrCpscCodes" [value]="cpsc">{{ cpsc }}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Chart area -->
+            <div class="dvp-metrics-section">
+              <p class="dvp-view-label">DR {{ drView === 'evidences' ? 'Evidences' : 'Classification' }}</p>
+              <app-design-rules-chart
+                [giCode]="summaryData?.gi_code ?? null"
+                [modelYear]="summaryData?.model_year?.toString() ?? null"
+                [programName]="summaryData?.program_code ?? null"
+                [selectedCpsc]="selectedDrCommodity"
+                [selectedPmt]="selectedCostsPmt"
+                [view]="drView"
+              ></app-design-rules-chart>
+            </div>
+
+          </div>
+
+          <!-- TIMELINE + VEHICLE LINE SECTION (SEGUNDA LINHA) -->
+          @if (activeChart !== 'costs') {
+          <div class="timeline-section">
+            <div class="timeline-containers-grid">
+              <!-- TIMELINE (left) -->
+              <div class="timeline-panel">
+                <app-timeline-milestones
+                  *ngIf="hasValidSummary && getNonNullMilestones().length > 0"
+                  [milestones]="getNonNullMilestones()">
+                </app-timeline-milestones>
+
+                <!-- No Milestones Message -->
+                <div class="no-milestones-message" *ngIf="hasValidSummary && getNonNullMilestones().length === 0">
+                  <i class="pi pi-calendar no-milestones-icon"></i>
+                  <h4 class="no-milestones-title">No Timeline Data Available</h4>
+                  <p class="no-milestones-text">
+                    There are no milestone dates available for this vehicle program at the moment.
+                    Timeline information may not be configured yet.
+                  </p>
+                </div>
+              </div>
+
+              <!-- VEHICLE LINE CARD (right) -->
+              <div class="vehicle-line-panel">
+
+                <!-- Vehicle line info -->
+                <div class="vehicle-line-card" *ngIf="hasValidSummary">
+                  <h3 class="vehicle-line-card-title">Vehicle Line Info</h3>
+                  <div class="vehicle-line-items">
+                    <div class="vehicle-line-item">
+                      <span class="label">Vehicle Line:</span>
+                      <span class="value">{{ summaryData.parsed.vehicle_line }}</span>
+                    </div>
+                    <div class="vehicle-line-item">
+                      <span class="label">Vehicle PTVL:</span>
+                      <span class="value">{{ summaryData.parsed.vehicle_ptvl }}</span>
+                    </div>
+                    <div class="vehicle-line-item">
+                      <span class="label">Affected Plant:</span>
+                      <span class="value">{{ summaryData.parsed.affected_plant }}</span>
+                    </div>
+                    <div class="vehicle-line-item" *ngIf="summaryData.parsed.plant_code !== summaryData.parsed.effective_point">
+                      <span class="label">Plant Code:</span>
+                      <span class="value">{{ summaryData.parsed.plant_code }}</span>
+                    </div>
+                    <div class="vehicle-line-item" *ngIf="summaryData.wers_plant">
+                      <span class="label">Wers Plant Code:</span>
+                      <span class="value">{{ summaryData.wers_plant }}</span>
+                    </div>
+                    <div class="vehicle-line-item">
+                      <span class="label">Effective Point:</span>
+                      <span class="value">{{ summaryData.parsed.effective_point }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- KEY DATES CARD -->
+                <div class="key-dates-card" *ngIf="hasValidSummary && getNonNullMilestones().length > 0">
+                  <button class="key-eng-toggle" (click)="toggleKeyEngineering()">
+                    <span class="toggle-icon">{{ showKeyEngineering ? '−' : '+' }}</span>
+                    <span class="toggle-text">Key Engineering Dates</span>
+                  </button>
+                  <div class="key-eng-container" *ngIf="showKeyEngineering">
+                    <div class="milestone-item" *ngFor="let item of getNonNullMilestones()">
+                      <span class="label">{{ item.key | uppercase }}:</span>
+                      <span class="value">{{ item.value }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- No Key Dates Message -->
+                <div class="no-key-dates-card" *ngIf="hasValidSummary && getNonNullMilestones().length === 0">
+                  <div class="no-dates-content">
+                    <i class="pi pi-info-circle no-dates-icon"></i>
+                    <span class="no-dates-text">No key engineering dates available</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          } <!-- end @if activeChart !== 'costs' -->
+
+          <!-- CHART + KEY ENGINEERING Grid -->
+          <div class="chart-key-grid">
+            <div class="grid-key">
+            </div>
+          </div>
+
+        </div>
+        <!-- END dashboard-grid -->
+      </ng-container>
+
+    </div>
+    <!-- END search-and-summary-container -->
+
+  </main>
+</div>

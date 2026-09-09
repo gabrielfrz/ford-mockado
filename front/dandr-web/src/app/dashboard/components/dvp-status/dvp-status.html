@@ -1,0 +1,77 @@
+<div class="dvp-status-container">
+  <!-- PAGE 1: ASSESSMENT & CLASSIFICATION CHARTS -->
+  <div class="dvp-page">
+    <!-- Container for two charts side by side (inspirado em Design Rules) -->
+    <div class="design-rules-container">
+      <!-- ASSESSMENT STATUS CHART -->
+      <div class="design-rules-chart">
+        <div class="design-rules-header">
+          <h2>Assessment Status</h2>
+        </div>
+        <div class="chart-wrapper">
+          <app-loading-spinner *ngIf="assessmentLoading"></app-loading-spinner>
+          <div *ngIf="assessmentError" class="error-message">{{ assessmentError }}</div>
+          <div *ngIf="!assessmentLoading && !assessmentError && assessmentChartData">
+            <p-chart type="doughnut" [data]="assessmentChartData" [options]="assessmentChartOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLASSIFICATION STATUS CHART -->
+      <div class="design-rules-chart">
+        <div class="design-rules-header">
+          <h2>Classification Status</h2>
+        </div>
+        <div class="chart-wrapper">
+          <app-loading-spinner *ngIf="classificationLoading"></app-loading-spinner>
+          <div *ngIf="!classificationLoading && classificationChartData">
+            <p-chart type="doughnut" [data]="classificationChartData" [options]="classificationChartOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSESSMENT BY DVP TEAM CHART -->
+    <div class="dvp-team-chart-section">
+      <div class="design-rules-header">
+        <h2>Assessment Status by DVP Team</h2>
+        <p class="chart-subtitle" *ngIf="selectedDvpTeam">Selected: {{ selectedDvpTeam }}</p>
+      </div>
+      <div class="chart-wrapper-full">
+        <div *ngIf="!selectedDvpTeam" class="empty-state-message">
+          <p>Please select a DVP Team from the sidebar to view the assessment breakdown</p>
+        </div>
+        <app-loading-spinner *ngIf="selectedDvpTeam && cpscLoading"></app-loading-spinner>
+        <div *ngIf="selectedDvpTeam && cpscError" class="error-message">{{ cpscError }}</div>
+        <div *ngIf="selectedDvpTeam && !cpscLoading && !cpscError && cpscChartData">
+          <p-chart type="doughnut" [data]="cpscChartData" [options]="cpscChartOptions"></p-chart>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY INFO -->
+    @if (summaryData) {
+      <div class="summary-card">
+        <div class="summary-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <h3>Project Information</h3>
+        </div>
+        <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">Vehicle Line</span>
+          <span class="summary-value">{{ summaryData.parsed?.vehicle_line || 'N/A' }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Affected Plant</span>
+          <span class="summary-value">{{ summaryData.parsed?.affected_plant || 'N/A' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+  </div>
+</div>
+

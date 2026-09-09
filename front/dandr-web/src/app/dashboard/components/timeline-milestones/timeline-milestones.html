@@ -1,0 +1,57 @@
+<div class="timeline-container" *ngIf="formattedMilestones.length > 0">
+
+  <div class="timeline-header">
+    <span class="timeline-title">Timeline Milestones</span>
+  </div>
+
+  <div class="timeline-row">
+  <button
+    class="timeline-arrow"
+    (click)="scrollLeft()"
+    (mouseenter)="onArrowMouseEnter('left')"
+    (mouseleave)="onArrowMouseLeave()">&#9664;</button>
+
+  <div class="timeline" #timelineContainer>
+    <div class="timeline-inner">
+
+    <div
+      class="timeline-item"
+      *ngFor="let m of formattedMilestones; let i = index"
+      [class.is-active]="m.isActive"
+      [class.is-past]="m.isPast && !m.isActive"
+      [class.above]="i % 2 === 0"
+      [class.below]="i % 2 !== 0"
+      (click)="milestoneClick.emit({ label: m.label, date: m.date })"
+      style="cursor: pointer;">
+
+      <!-- text shown above the line (even items) -->
+      <div class="item-top">
+        <span class="item-label">{{ m.label }}</span>
+        <span class="item-date">{{ m.date | date:'dd MMM yy' }}</span>
+      </div>
+
+      <!-- dot sits on the center line -->
+      <div class="item-dot-row">
+        <div class="dot"></div>
+      </div>
+
+      <!-- text shown below the line (odd items) -->
+      <div class="item-bottom">
+        <span class="item-label">{{ m.label }}</span>
+        <span class="item-date">{{ m.date | date:'dd MMM yy' }}</span>
+      </div>
+
+    </div>
+
+    </div><!-- timeline-inner -->
+  </div>
+
+  <button
+    class="timeline-arrow"
+    (click)="scrollRight()"
+    (mouseenter)="onArrowMouseEnter('right')"
+    (mouseleave)="onArrowMouseLeave()">&#9654;</button>
+
+  </div><!-- timeline-row -->
+
+</div>

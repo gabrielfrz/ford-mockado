@@ -1,0 +1,229 @@
+// Heights
+$text-area-h: 80px;   // space for label + date
+$stem-h:      70px;   // dotted line from text to dot
+$dot-size:    16px;
+$dot-active-size: 22px;
+
+.timeline-container {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.4rem;
+  border-bottom: 1.5px solid #E0E5F2;
+  margin-bottom: 0.4rem;
+}
+
+.timeline-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #066FEF;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+// Arrow buttons
+.timeline-arrow {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.2s ease;
+  padding: 0;
+
+  &:hover { color: #066FEF; }
+}
+
+// Scrollable strip
+.timeline {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  height: calc(#{$text-area-h} * 2 + #{$stem-h} * 2 + #{$dot-active-size});
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+// Inner flex row — this is what actually grows to full scroll width
+.timeline-inner {
+  display: inline-flex;  // shrinks to content width → line spans all items
+  align-items: stretch;
+  position: relative;
+  min-width: 100%;       // always at least as wide as visible area
+
+  // Continuous horizontal center line — now spans full content width
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #1e293b;
+    z-index: 0;
+    pointer-events: none;
+  }
+}
+
+// Each milestone item
+.timeline-item {
+  flex: 0 0 auto;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+// Text area above the line
+.item-top {
+  height: calc(#{$text-area-h} + #{$stem-h});
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 6px;
+  gap: 3px;
+  visibility: hidden;  // hidden by default, shown for .above
+  position: relative;
+  z-index: 4;
+}
+
+// Text area below the line
+.item-bottom {
+  height: calc(#{$text-area-h} + #{$stem-h});
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 6px;
+  gap: 3px;
+  visibility: hidden;  // hidden by default, shown for .below
+  position: relative;
+  z-index: 4;
+}
+
+// Show top text for even items
+.timeline-item.above .item-top   { visibility: visible; }
+// Show bottom text for odd items
+.timeline-item.below .item-bottom { visibility: visible; }
+
+// Dot row — sits exactly at vertical center
+.item-dot-row {
+  flex-shrink: 0;
+  height: $dot-active-size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+
+  // Dotted stem spans both text areas
+  &::before {
+    content: '';
+    position: absolute;
+    top: calc(-#{$stem-h});
+    bottom: calc(-#{$stem-h});
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    border-left: 2px dotted #adb5bd;
+    z-index: 1;
+  }
+}
+
+// Dot
+.dot {
+  width: $dot-size;
+  height: $dot-size;
+  background: #fff;
+  border: 3px solid #007BFF;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+// Past dot
+.timeline-item.is-past .dot {
+  background: #d1d5db;
+  border-color: #d1d5db;
+  box-shadow: none;
+}
+
+// Active dot
+.timeline-item.is-active {
+  .dot {
+    width: $dot-active-size;
+    height: $dot-active-size;
+    background: #FF7F00;
+    border-color: #FF7F00;
+    box-shadow:
+      0 0 0 4px rgba(255, 127, 0, 0.15),
+      0 0 18px rgba(255, 127, 0, 0.55);
+  }
+
+  .item-dot-row::before {
+    border-left-style: solid;
+    border-color: #FF7F00;
+  }
+}
+
+// Labels
+.item-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--ford-blue, #007BFF);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
+  word-break: break-word;
+  max-width: 90px;
+  text-align: center;
+}
+
+.item-date {
+  font-size: 0.63rem;
+  font-weight: 700;
+  color: #374151;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+// Active colors — only dot is orange; text stays readable
+.timeline-item.is-active {
+  .item-label { color: var(--ford-blue, #007BFF); font-weight: 800; }
+  .item-date   { color: #1e293b; font-weight: 800; }
+}
+
+// Past colors
+.timeline-item.is-past:not(.is-active) {
+  .item-label, .item-date { color: #9ca3af; }
+}

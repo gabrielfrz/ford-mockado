@@ -1,0 +1,114 @@
+.cae-commodity-wrapper {
+  width: 100%;
+}
+
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333333;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.metrics-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Layout: Metrics (Left) + Chart (Right) */
+.metrics-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3rem;
+  align-items: stretch;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+}
+
+app-metrics-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  width: 100%;
+  padding-top: 2rem;
+
+  p-chart {
+    width: 100% !important;
+    max-width: 220px !important;
+    height: 220px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Ensure chart container is properly sized and centered */
+  ::ng-deep .p-chart {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+
+    canvas {
+      max-width: 220px !important;
+      max-height: 220px !important;
+      width: 220px !important;
+      height: 220px !important;
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #E0E5F2;
+  border-top: 4px solid #066FEF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-size: 0.9rem;
+  color: #546E7A;
+  margin: 0;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #999999;
+  font-size: 1rem;
+}

@@ -1,0 +1,133 @@
+<div class="costs-metrics-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading cost data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && errorMessage" class="error-state">
+    <p class="error-message">{{ errorMessage }}</p>
+  </div>
+
+  <!-- Data Display -->
+  <div *ngIf="!isLoading && hasData && !errorMessage" class="costs-content">
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="summary-card grand-total">
+        <div class="card-label">Grand Total Cost</div>
+        <div class="card-value">{{ formatCurrency(metrics.grandTotalCost) }}</div>
+        <div class="card-sublabel">{{ metrics.toolingRecords + metrics.pieceRecords }} records</div>
+      </div>
+
+      <div class="summary-card tooling">
+        <div class="card-label">Tooling Cost</div>
+        <div class="card-value">{{ formatCurrency(metrics.totalToolingCost) }}</div>
+        <div class="card-sublabel">{{ metrics.toolingRecords }} records</div>
+      </div>
+
+      <div class="summary-card piece">
+        <div class="card-label">Piece Cost</div>
+        <div class="card-value">{{ formatCurrency(metrics.totalPieceCost) }}</div>
+        <div class="card-sublabel">{{ metrics.pieceRecords }} records</div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+
+      <!-- Tooling Cost Breakdown -->
+      <div class="chart-container">
+        <h3 class="chart-title">Top 5 CPSCs by Tooling Cost</h3>
+        <div class="chart-content">
+          <div *ngIf="topCpscsByTooling.length === 0" class="no-data">
+            No tooling cost data available
+          </div>
+          <div *ngIf="topCpscsByTooling.length > 0" class="bar-chart">
+            <div *ngFor="let item of topCpscsByTooling; let i = index" class="bar-item">
+              <div class="bar-label">
+                <span class="cpsc-name">{{ item.cpsc }}</span>
+                <span class="cpsc-cost">{{ formatCurrency(item.cost) }}</span>
+              </div>
+              <div class="bar-wrapper">
+                <div
+                  class="bar-fill"
+                  [style.width.%]="item.percentage"
+                  [style.background-color]="getColorForIndex(i)">
+                </div>
+              </div>
+              <div class="bar-percentage">{{ formatPercentage(item.percentage) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Piece Cost Breakdown -->
+      <div class="chart-container">
+        <h3 class="chart-title">Top 5 CPSCs by Piece Cost</h3>
+        <div class="chart-content">
+          <div *ngIf="topCpscsByPiece.length === 0" class="no-data">
+            No piece cost data available
+          </div>
+          <div *ngIf="topCpscsByPiece.length > 0" class="bar-chart">
+            <div *ngFor="let item of topCpscsByPiece; let i = index" class="bar-item">
+              <div class="bar-label">
+                <span class="cpsc-name">{{ item.cpsc }}</span>
+                <span class="cpsc-cost">{{ formatCurrency(item.cost) }}</span>
+              </div>
+              <div class="bar-wrapper">
+                <div
+                  class="bar-fill"
+                  [style.width.%]="item.percentage"
+                  [style.background-color]="getColorForIndex(i)">
+                </div>
+              </div>
+              <div class="bar-percentage">{{ formatPercentage(item.percentage) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CPSC Breakdown Table -->
+    <div class="breakdown-table-section" *ngIf="!selectedCpsc">
+      <h3 class="table-title">Cost Breakdown by CPSC</h3>
+      <div class="table-wrapper">
+        <table class="breakdown-table">
+          <thead>
+            <tr>
+              <th>CPSC</th>
+              <th>Tooling Cost</th>
+              <th>Piece Cost</th>
+              <th>Total Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of metrics.cpscBreakdown | keyvalue">
+              <td class="cpsc-cell">{{ entry.key }}</td>
+              <td class="cost-cell">{{ formatCurrency($any(entry.value).tooling) }}</td>
+              <td class="cost-cell">{{ formatCurrency($any(entry.value).piece) }}</td>
+              <td class="cost-cell total-cell">{{ formatCurrency($any(entry.value).total) }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="totals-row">
+              <td>Total</td>
+              <td>{{ formatCurrency(metrics.totalToolingCost) }}</td>
+              <td>{{ formatCurrency(metrics.totalPieceCost) }}</td>
+              <td>{{ formatCurrency(metrics.grandTotalCost) }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !hasData && !errorMessage" class="empty-state">
+    <p>Select an effective point to view cost data</p>
+  </div>
+</div>

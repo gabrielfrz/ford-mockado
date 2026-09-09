@@ -1,0 +1,168 @@
+<div class="costs-status-container">
+
+  <!-- PMT not selected — initial state -->
+  <div class="empty-state-container" *ngIf="!selectedPmt">
+    <div class="empty-state-box">
+      <p class="empty-state-description">Please select a <strong>PMT</strong> in the left sidebar to load cost data</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="selectedPmt">
+
+    <!-- Context subtitle -->
+    <p class="costs-context-label">
+      Effective Point: <strong>{{ giCode }}</strong> &nbsp;·&nbsp; PMT: <strong>{{ selectedPmt }}</strong>
+      <ng-container *ngIf="activeFilterLabels.length > 0">
+        &nbsp;·&nbsp;
+        <span *ngFor="let label of activeFilterLabels; let last = last" class="costs-filter-badge">
+          {{ label }}<ng-container *ngIf="!last"> &nbsp;·&nbsp; </ng-container>
+        </span>
+      </ng-container>
+    </p>
+
+    <!-- Summary cards remain visible as skeletons while loading. -->
+    <div class="summary-cards">
+      <ng-container *ngIf="!isLoadingSummary; else summarySkeletons">
+        <div class="summary-card grand-total">
+          <div class="card-label">Grand Total Cost</div>
+          <div class="card-value">{{ formatCurrency(summaryData.grandTotal) }}</div>
+          <div class="card-sublabel">{{ summaryData.totalRecords }} records</div>
+        </div>
+        <div class="summary-card piece">
+          <div class="card-label">Piece Cost</div>
+          <div class="card-value">{{ formatCurrency(summaryData.pieceCost) }}</div>
+          <div class="card-sublabel">{{ summaryData.pieceRecords }} records</div>
+        </div>
+        <div class="summary-card tooling">
+          <div class="card-label">Tooling Cost</div>
+          <div class="card-value">{{ formatCurrency(summaryData.toolingCost) }}</div>
+          <div class="card-sublabel">{{ summaryData.toolingRecords }} records</div>
+        </div>
+      </ng-container>
+      <ng-template #summarySkeletons>
+        <div class="summary-card skeleton-card" *ngFor="let i of [1,2,3]">
+          <div class="skeleton-line skeleton-label"></div>
+          <div class="skeleton-line skeleton-value"></div>
+          <div class="skeleton-line skeleton-sublabel"></div>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Overview stats bar -->
+    <div class="overview-bar" *ngIf="!isLoading && filteredTotals">
+      <span class="overview-bar-title">{{ activeTab === 'tooling' ? 'Tooling Overview' : 'Pieces Overview' }}</span>
+      <div class="overview-stat">
+        <span class="overview-stat-label">Total Cost</span>
+        <span class="overview-stat-value">{{ formatCurrency(filteredTotals.actual) }}</span>
+      </div>
+      <div class="overview-divider"></div>
+      <div class="overview-stat">
+        <span class="overview-stat-label">FEDEBOM Target</span>
+        <span class="overview-stat-value">{{ filteredTotals.target === '-' ? '—' : formatCurrency(+filteredTotals.target) }}</span>
+      </div>
+      <div class="overview-divider"></div>
+      <div class="overview-stat">
+        <span class="overview-stat-label">Gap to Target</span>
+        <span class="overview-stat-value" [style.color]="getCellColor(filteredTotals.gap)">{{ formatCurrency(filteredTotals.gap) }}</span>
+      </div>
+    </div>
+
+    <!-- Filters become visible after the table loads. -->
+    <div class="filters-section" *ngIf="!isLoading">
+        <div class="filter-group">
+          <label for="commodity-select">Commodity:</label>
+          <select
+            id="commodity-select"
+            [(ngModel)]="selectedCommodity"
+            (change)="onCommodityChange()"
+            class="filter-select"
+            [disabled]="isLoadingCommodities"
+          >
+            <option value="">{{ isLoadingCommodities ? 'Loading...' : 'All Commodities' }}</option>
+            <option *ngFor="let commodity of availableCommodities" [value]="commodity.cpsc">
+              {{ commodity.cpsc }} - {{ commodity.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="control-model-select">Control Model:</label>
+          <select
+            id="control-model-select"
+            [(ngModel)]="selectedControlModel"
+            (change)="onControlModelChange()"
+            class="filter-select"
+            [disabled]="isLoadingControlModels"
+          >
+            <option value="">{{ isLoadingControlModels ? 'Loading...' : 'All Control Models' }}</option>
+            <option *ngFor="let model of availableControlModels" [value]="model">
+              {{ model }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="partnumber-select">Part Number:</label>
+          <select
+            id="partnumber-select"
+            [(ngModel)]="selectedPartNumber"
+            (change)="onPartNumberChange()"
+            class="filter-select"
+            [disabled]="isLoadingPartNumbers"
+          >
+            <option value="">{{ isLoadingPartNumbers ? 'Loading...' : 'All Part Numbers' }}</option>
+            <option *ngFor="let pn of availablePartNumbers" [value]="pn">
+              {{ pn }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Keep the loading spinner within the table area. -->
+      <div class="table-container">
+        <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+        <table *ngIf="!isLoading" class="excel-table">
+          <thead>
+            <tr>
+              <th class="text-left">Commodity</th>
+              <th class="text-right">Piece Price</th>
+              <th class="text-right">FEDEBOM Target</th>
+              <th class="text-right">Gap to Target - B/(W)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of getVisibleTableData(); let even = even"
+                [class.even]="even"
+                [class.highlight-row]="row.isHighlight"
+                [class.subtotal-row]="row.isSubtotal"
+                [class.total-row]="row.isTotal"
+                [class.expandable-row]="isParentRow(row)"
+                [class.expanded-row]="isParentRow(row) && isExpanded(row)"
+                (click)="toggleCommodityRow(row)">
+              <td class="text-left" [class.indented]="row.isIndented">
+                <span *ngIf="isParentRow(row)" class="expand-icon">
+                  {{ isExpanded(row) ? '▼' : '▶' }}
+                </span>
+                {{ row.description }}
+              </td>
+              <td class="text-right" [style.color]="getCellColor(row.piecePrice)">
+                {{ formatValue(row.piecePrice) }}
+              </td>
+              <td class="text-right" [style.color]="getCellColor(row.fedebomTarget)">
+                {{ formatValue(row.fedebomTarget) }}
+              </td>
+              <td class="text-right" [style.color]="getCellColor(row.gapToTarget)">
+                {{ formatValue(row.gapToTarget) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+  </ng-container>
+</div>

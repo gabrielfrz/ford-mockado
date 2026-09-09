@@ -1,0 +1,257 @@
+@font-face {
+  font-family: 'Ford F-1';
+  src: url('/fonts/ford-f1/FordF1VF.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+:root {
+  --ford-blue: #00095B;
+  --ford-twilight: #00142E;
+  --ford-skyview: #066FEF;
+  --white: #FFFFFF;
+  --light-gray: #F0F0F0;
+  --off-black: #0F0F0F;
+  --black: #000000;
+  --ford-font-family: 'Ford F-1', Arial, Helvetica, sans-serif;
+  background-color: var(--light-gray);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--ford-font-family);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  line-height: 1.4;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea,
+.p-component,
+.apexcharts-canvas text {
+  font-family: var(--ford-font-family) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--ford-font-family);
+  font-weight: 400 !important;
+}
+
+strong,
+b {
+  font-weight: 700;
+}
+
+/* ======== PRIMENG AUTOCOMPLETE GLOBAL STYLES ======== */
+.p-autocomplete-panel {
+  background: var(--white) !important;
+  border-radius: 12px !important;
+  padding: 0.5rem !important;
+  /* shadow only on sides and bottom (no top shadow) */
+  box-shadow: 6px 0 18px rgba(0,0,0,0.06), -6px 0 18px rgba(0,0,0,0.06), 0 8px 22px rgba(0,0,0,0.12) !important;
+}
+
+.p-autocomplete-items .p-autocomplete-item {
+  padding: .7rem 1rem !important;
+  border-radius: 10px !important;
+  font-size: .92rem !important;
+  transition: all 0.18s ease !important;
+  color: #111 !important; /* darker code color */
+  background: var(--white) !important;
+}
+
+.p-autocomplete-items .p-autocomplete-item:hover,
+.p-autocomplete-items .p-autocomplete-item.ng-state-highlight {
+  background: #e8f1ff !important;
+  color: var(--ford-blue) !important;
+  cursor: pointer !important;
+  transform: translateX(4px) !important;
+  font-weight: 600 !important;
+}
+
+/* DEBUG CLASSES */
+.autocomplete-panel-debug {
+  background: var(--white) !important;
+  border-radius: 12px !important;
+  padding: 0.5rem !important;
+  box-shadow: 6px 0 18px rgba(0,0,0,0.06), -6px 0 18px rgba(0,0,0,0.06), 0 8px 22px rgba(0,0,0,0.12) !important;
+}
+
+/* FILTER AUTOCOMPLETE STYLES */
+
+/* Wrapper: make the whole autocomplete look like one pill */
+.filter-autocomplete.p-autocomplete {
+  display: flex !important;
+  align-items: stretch !important;
+  position: relative !important;
+  border: 1px solid #CCCCCC !important;
+  border-radius: 8px !important;
+  background: #FFFFFF !important;
+  overflow: visible !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  box-shadow: none !important;
+  height: 44px !important;
+}
+
+.filter-autocomplete.p-autocomplete:focus-within {
+  border-color: #104EAD !important;
+  box-shadow: 0 0 0 2px rgba(16, 78, 173, 0.1) !important;
+}
+
+/* Input inside: no border of its own */
+.filter-autocomplete .p-autocomplete-input,
+.filter-autocomplete.p-autocomplete .p-inputtext {
+  border: none !important;
+  border-radius: 8px 0 0 8px !important;
+  background: transparent !important;
+  padding: 0 0.9rem !important;
+  font-size: 0.9rem !important;
+  color: #333333 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  box-shadow: none !important;
+  height: 100% !important;
+  flex: 1 !important;
+}
+
+.filter-autocomplete .p-autocomplete-input:focus,
+.filter-autocomplete.p-autocomplete .p-inputtext:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.filter-autocomplete .p-autocomplete-input::placeholder {
+  color: #AAAAAA !important;
+  font-size: 0.85rem !important;
+}
+
+/* Dropdown button: flat, icon-only, integrated */
+.filter-autocomplete .p-autocomplete-dropdown {
+  width: 36px !important;
+  min-width: 36px !important;
+  background: transparent !important;
+  border: none !important;
+  border-left: 1px solid #E8EBF2 !important;
+  border-radius: 0 8px 8px 0 !important;
+  color: #7B8CA6 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease, color 0.15s ease !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.filter-autocomplete .p-autocomplete-dropdown:hover {
+  background: #F4F7FE !important;
+  color: #104EAD !important;
+}
+
+/* Replace default icon with a clean SVG chevron */
+.filter-autocomplete .p-autocomplete-dropdown .p-button-icon,
+.filter-autocomplete .p-autocomplete-dropdown .p-icon {
+  width: 14px !important;
+  height: 14px !important;
+  color: inherit !important;
+}
+
+/* Position the loading spinner inside the input before the dropdown button. */
+.filter-autocomplete .p-autocomplete-loader {
+  position: absolute !important;
+  right: 44px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 16px !important;
+  height: 16px !important;
+  pointer-events: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #104EAD !important;
+  opacity: 0.8 !important;
+}
+
+.filter-autocomplete .p-autocomplete-loader .p-icon,
+.filter-autocomplete .p-autocomplete-loader svg {
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  animation: filter-spin 0.8s linear infinite !important;
+  transform-box: fill-box !important;
+  transform-origin: center !important;
+}
+
+@keyframes filter-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.autocomplete-item-debug {
+  background: var(--white) !important;
+  color: #111 !important; /* darker code color */
+  border-radius: 10px !important;
+  padding: .7rem 1rem !important;
+  transition: all 0.18s ease !important;
+}
+
+.autocomplete-item-debug:hover,
+.autocomplete-item-debug.ng-state-highlight {
+  background: #e8f1ff !important;
+  color: var(--ford-blue) !important;
+  transform: translateX(4px) !important;
+  font-weight: 600 !important;
+}
+
+/* Strong global overrides to ensure the panel shows no top shadow,
+   items use very dark text and hover works even when panel is appended to body */
+.p-autocomplete-panel,
+.autocomplete-panel-debug,
+.autocomplete-sidebar-panel {
+  background: var(--white) !important;
+  border-radius: 12px !important;
+  padding: 0.5rem !important;
+  /* shadows only on left, right and bottom (no top shadow) */
+  box-shadow: 6px 0 18px rgba(0,0,0,0.06), -6px 0 18px rgba(0,0,0,0.06), 0 10px 24px rgba(0,0,0,0.12) !important;
+  margin-top: 12px !important; /* larger gap so input focus/shadow doesn't show above */
+  z-index: 3000 !important; /* ensure panel sits above input focus ring */
+  position: relative !important;
+  transform: translateZ(0) !important;
+  overflow: visible !important;
+}
+
+.p-autocomplete-items .p-autocomplete-item,
+.autocomplete-item-debug,
+.autocomplete-sidebar-item {
+  color: #000 !important; /* darker code color */
+  background: var(--white) !important;
+  padding: .7rem 1rem !important;
+  border-radius: 10px !important;
+  transition: background 0.15s ease, transform 0.18s ease !important;
+}
+
+/* Ensure hover works with high specificity and matches PrimeNG classes */
+.p-autocomplete-items .p-autocomplete-item:hover,
+.p-autocomplete-items .p-autocomplete-item.ng-state-highlight,
+.autocomplete-item-debug:hover,
+.autocomplete-item-debug.ng-state-highlight,
+.autocomplete-sidebar-item:hover,
+.autocomplete-sidebar-item.ng-state-highlight {
+  background: #e8f1ff !important;
+  color: var(--ford-blue) !important;
+  cursor: pointer !important;
+  transform: translateX(4px) !important;
+  font-weight: 600 !important;
+}

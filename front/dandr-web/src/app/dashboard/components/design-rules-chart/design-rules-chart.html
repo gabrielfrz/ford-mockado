@@ -1,0 +1,81 @@
+<!-- EVIDENCES -->
+<ng-container *ngIf="view === 'evidences'">
+
+  <!-- Loading -->
+  <div *ngIf="isLoadingEvidences" class="drc-loading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoadingEvidences && evidencesChartData" class="drc-wrapper">
+    <div class="drc-layout">
+
+      <!-- Left: metric cards -->
+      <div class="drc-cards">
+        <app-metrics-grid [metrics]="evidencesMetrics"></app-metrics-grid>
+      </div>
+
+      <!-- Right: bar chart + dot legend -->
+      <div class="drc-chart-area">
+        <div class="drc-chart">
+          <p-chart type="bar" [data]="evidencesChartData" [options]="evidencesChartOptions"></p-chart>
+        </div>
+        <div class="drc-dot-legend">
+          <div class="dot-legend-item" *ngFor="let item of evidencesLegend">
+            <span class="dot" [style.background]="item.color"></span>
+            <span class="dot-label">{{ item.label }}</span>
+            <span class="dot-pct">{{ item.pct }}%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoadingEvidences && !evidencesChartData" class="drc-empty">
+    <p>No evidence data available.</p>
+  </div>
+
+</ng-container>
+
+<!-- CLASSIFICATION -->
+<ng-container *ngIf="view === 'classification'">
+
+  <!-- Loading -->
+  <div *ngIf="isLoadingClassification" class="drc-loading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoadingClassification && classificationChartData" class="drc-wrapper">
+    <div class="drc-layout">
+
+      <!-- Left: metric cards -->
+      <div class="drc-cards">
+        <app-metrics-grid [metrics]="classificationMetrics"></app-metrics-grid>
+      </div>
+
+      <!-- Right: bar chart + dot legend -->
+      <div class="drc-chart-area">
+        <div class="drc-chart">
+          <p-chart type="bar" [data]="classificationChartData" [options]="classificationChartOptions"></p-chart>
+        </div>
+        <div class="drc-dot-legend">
+          <div class="dot-legend-item" *ngFor="let item of classificationLegend">
+            <span class="dot" [style.background]="item.color"></span>
+            <span class="dot-label">{{ item.label }}</span>
+            <span class="dot-pct">{{ item.pct }}%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoadingClassification && !classificationChartData" class="drc-empty">
+    <p>No classification data available.</p>
+  </div>
+
+</ng-container>

@@ -1,0 +1,583 @@
+
+@use './shared/toast.styles.scss';
+// Sidebar warning box for no vehicle loaded
+.sidebar-warning-box {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+:root {
+  --input-background: var(--white);
+  --input-text-color: var(--dark-gray);
+  --label-color: var(--white);
+  --ford-skyview-hover: #0550c8;
+  --button-disabled: #cccccc;
+
+  --focus-ring-color: rgba(0, 112, 173, 0.3);
+
+  --sidebar-input-label-color: var(--ford-blue); // Sidebar input-label color
+  --sidebar-section-title-color: var(--ford-blue); // Sidebar section-title color
+  --sidebar-background-color: #FFFFFF; // White sidebar background
+  --sidebar-link-text-color: var(--dark-gray); // Default sidebar link color
+  --sidebar-link-hover-bg: #E0E5F2; // Light hover background
+  --sidebar-link-hover-text: var(--ford-blue); // Blue hover text
+  --canvas-background: #F4F7FE; // Light blue-gray canvas
+  --card-border-shadow: #E0E5F2; // Tom de gelo para bordas e sombras
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-family: var(--ford-font-family);
+  background: var(--ford-blue);
+  color: var(--white);
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .menu-btn {
+      font-size: 22px;
+      background: none;
+      border: none;
+      color: var(--ford-skyview);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .menu-btn:hover {
+      color: #00a1e0;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+  }
+
+  .nav-center {
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--white);
+      margin: 0;
+    }
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+
+    .avatar {
+      background: var(--white);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ford-blue);
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+    .avatar:hover {
+      transform: scale(1.1);
+    }
+
+    .profile-menu {
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #1f2937;
+      padding: 12px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 150px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+
+      p, a {
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 6px 8px;
+        border-radius: 4px;
+        transition: background 0.2s;
+      }
+      a:hover, p:hover {
+        background: #003366;
+      }
+    }
+  }
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  font-family: var(--ford-font-family);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100vh;
+  background-color: #FFFFFF;
+  color: grey;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 1px 0 3px rgba(0,0,0,0.04);
+  z-index: 999;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 18px;
+  background: var(--ford-blue);
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--ford-skyview)
+}
+
+.sidebar-icon {
+  font-size: 0.95rem;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.sidebar-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.sidebar-title {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #FFFFFF;
+  letter-spacing: 0.3px;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 18px 18px;
+  overflow-y: auto;
+}
+
+/* Section titles */
+.sidebar-section h2 {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--ford-skyview);
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+/* ======== CURRENT PROGRAM ======== */
+.current-vehicle-section .current-vehicle-value {
+  font-size: 0.95rem;
+  padding: 0 0 5px;
+  color: grey;
+    border-bottom: 1px solid #dce1e4;
+
+}
+
+.program-selection {
+  margin-top: 0.9rem;
+}
+
+/* ======== FORM GROUP (igual ao screenshot) ======== */
+.form-group-sidebar {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-field-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  position: relative;
+
+  label {
+    color: #9E9E9E;
+  }
+
+  &::after {
+    content: 'N/A on Costs view';
+    display: block;
+    font-size: 0.68rem;
+    color: #9E9E9E;
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  * {
+    pointer-events: none;
+  }
+}
+
+.form-group-sidebar label {
+  font-size: 0.92rem;
+  color: black;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* ======== INPUT DO PRIMEFACES NO LAYOUT ======== */
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-input,
+:host ::ng-deep .autocomplete-sidebar .p-inputtext {
+  width: 100%;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.35;
+
+  background: var(--white);
+  border: 1px solid #cfd4da;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-input::placeholder,
+:host ::ng-deep .autocomplete-sidebar .p-inputtext::placeholder {
+  font-size: 0.92rem;
+}
+
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-input:focus,
+:host ::ng-deep .autocomplete-sidebar .p-inputtext:focus {
+  outline: none;
+  border-color: var(--ford-skyview);
+  box-shadow: 0 0 0 3px rgba(0, 112, 173, 0.2);
+}
+
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-input:disabled,
+:host ::ng-deep .autocomplete-sidebar .p-inputtext:disabled {
+  background: var(--light-gray);
+  border-color: #d8dce2;
+  color: #858b94;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-input:disabled::placeholder,
+:host ::ng-deep .autocomplete-sidebar .p-inputtext:disabled::placeholder {
+  color: #9298a1;
+  opacity: 1;
+}
+
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-dropdown {
+  border-radius: 0 10px 10px 0;
+  background: var(--white);
+  border: 1px solid #cfd4da;
+}
+
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-dropdown:disabled,
+:host ::ng-deep .autocomplete-sidebar .p-autocomplete-dropdown.p-disabled {
+  background: var(--light-gray);
+  border-color: #d8dce2;
+  color: #858b94;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* Panel appended to body; ensure white background like Model Year dropdown */
+.autocomplete-sidebar-panel {
+  background: var(--white) !important;
+  border: 1px solid #cfd4da !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12) !important;
+  color: #333 !important;
+}
+
+.autocomplete-sidebar-panel .p-autocomplete-item,
+.autocomplete-sidebar-item {
+  background: var(--white) !important;
+  color: #333 !important;
+}
+
+.autocomplete-sidebar-panel .p-autocomplete-item:hover,
+.autocomplete-sidebar-item:hover {
+  background: #f5f5f5 !important;
+}
+
+.autocomplete-sidebar .p-button-icon {
+  color: #444;
+}
+
+.select-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.select-wrapper select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: var(--white);
+  color: var(--dark-gray);
+  font-size: 0.95rem;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+
+  border: 1px solid #cfd4da;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.select-wrapper select:focus {
+  outline: none;
+  border-color: var(--ford-skyview);
+  box-shadow: 0 0 0 3px rgba(0, 112, 173, 0.2);
+}
+
+.select-wrapper::after {
+  content: "▾";
+  font-size: 0.75rem;
+  color: #444;
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 8px;
+}
+
+.sidebar-links a {
+  padding: 10px 14px;
+  border-radius: 6px;
+  color: var(--off-black);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-links a:hover,
+.sidebar-links a.active {
+  background: #e8f0ff;
+  color: var(--ford-blue);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.25);
+  border-radius: 3px;
+}
+
+.content {
+  margin-top: 0;
+  margin-left: 300px;
+   padding: 15px 8px;
+  min-height: calc(100vh - 35px);
+  box-sizing: border-box;
+  background-color: #F4F7FE;
+}
+
+@media(min-width: 769px) {
+  .content {
+    margin-left: 300px;
+  }
+}
+
+.footer {
+  position: static;
+  margin-left: 300px;
+  width: calc(100% - 300px);
+  height: 35px;
+  line-height: 35px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  color: var(--dark-gray);
+  font-size: 0.85rem;
+  font-family: var(--ford-font-family);
+  box-shadow: 0 -1px 3px rgba(0,0,0,0.08);
+}
+
+/* ======== DELIVERABLES BUTTONS ======== */
+.deliverables-section {
+  border-top: 1px solid #dce1e4;
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+.vehicle-selection-hint {
+  margin: 0.45rem 0 0;
+  color: #858b94;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.deliverables-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.deliverable-btn {
+  display: flex;
+  align-items: center;
+  min-height: 2.85rem;
+  background-color: transparent;
+  color: #1a1a1a;
+  border: none;
+  border-left: 3px solid transparent;
+  padding: 0.65rem 0.85rem;
+  border-radius: 5px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+  text-align: left;
+  text-decoration: none;
+}
+
+.deliverable-btn:hover:not(:disabled) {
+  background-color: #f3f7fc;
+  color: var(--ford-blue);
+}
+
+.deliverable-btn.active:not(:disabled) {
+  background-color: #ebf5ff;
+  border-left-color: var(--ford-skyview);
+  color: var(--ford-blue);
+}
+
+.deliverable-btn:disabled {
+  background-color: transparent;
+  color: #a9adb4;
+  cursor: not-allowed;
+}
+
+/* ======== SIDEBAR FOOTER ======== */
+.sidebar-footer {
+  flex-shrink: 0;
+  padding: 1rem;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+.sidebar-account-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.user-initial {
+  display: grid;
+  place-items: center;
+  flex: 0 0 2rem;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #d8deeb;
+  border-radius: 50%;
+  background: #eef2f8;
+  color: var(--ford-blue);
+  font-weight: 600;
+}
+
+.logout-btn {
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--ford-blue);
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--ford-blue);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &:hover {
+    background: #ebf5ff;
+  }
+}
+
+.fede-status-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--ford-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 9, 91, 0.2);
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: var(--ford-skyview);
+    box-shadow: 0 4px 12px rgba(6, 111, 239, 0.3);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    left: -220px;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .content {
+    margin-left: 0 !important;
+  }
+  .footer {
+    margin-left: 0;
+    width: 100%;
+  }
+}

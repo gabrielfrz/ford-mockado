@@ -1,0 +1,178 @@
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.2rem;
+  padding-left: 1rem;
+  background: #f8f9fb;
+  border-radius: 12px;
+  border-left: 4px solid #066FEF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  text-align: center;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+  }
+}
+
+.metric-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #555555;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin: 0;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1A1A1A;
+  line-height: 1.1;
+  margin: 0.2rem 0 0.1rem 0;
+}
+
+.metric-percent {
+  font-size: 0.7rem;
+  color: #AAAAAA;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Color variants - Left border indicates status */
+.metric-item.meet {
+  border-left-color: #00B050;
+  background: rgba(0, 176, 80, 0.07);
+
+  .metric-value {
+    color: #00B050;
+  }
+}
+
+.metric-item.unassessed {
+  border-left-color: #FFC000;
+  background: rgba(255, 192, 0, 0.07);
+
+  .metric-value {
+    color: #d4a000;
+  }
+}
+
+.metric-item.approved-deviation {
+  border-left-color: #FF9900;
+  background: rgba(255, 153, 0, 0.07);
+
+  .metric-value {
+    color: #FF9900;
+  }
+}
+
+.metric-item.does-not-meet {
+  border-left-color: #FF0000;
+  background: rgba(255, 0, 0, 0.07);
+
+  .metric-value {
+    color: #FF0000;
+  }
+}
+
+.metric-item.cannot-assess {
+  border-left-color: #808080;
+  background: rgba(128, 128, 128, 0.07);
+
+  .metric-value {
+    color: #808080;
+  }
+}
+
+.metric-item.not-applicable {
+  border-left-color: #CCCCCC;
+  background: rgba(204, 204, 204, 0.1);
+
+  .metric-value {
+    color: #CCCCCC;
+  }
+}
+
+/* DPA5-specific color variants matching glidepath chart colors */
+.metric-item.compliant {
+  border-left-color: #28a745;
+  background: rgba(40, 167, 69, 0.08);
+
+  .metric-value {
+    color: #28a745;
+  }
+}
+
+.metric-item.not-compliant {
+  border-left-color: #dc3545;
+  background: rgba(220, 53, 69, 0.08);
+
+  .metric-value {
+    color: #dc3545;
+  }
+}
+
+.metric-item.not-assessable {
+  border-left-color: #007bff;
+  background: rgba(0, 123, 255, 0.08);
+
+  .metric-value {
+    color: #007bff;
+  }
+}
+
+/* Design Rules Classification color variants */
+.metric-item.dr-applicable {
+  border-left-color: #00BFA5;
+  background: rgba(0, 191, 165, 0.07);
+
+  .metric-value {
+    color: #00BFA5;
+  }
+}
+
+.metric-item.dr-carryover {
+  border-left-color: #2196F3;
+  background: rgba(33, 150, 243, 0.07);
+
+  .metric-value {
+    color: #2196F3;
+  }
+}
+
+.metric-item.dr-not-applicable {
+  border-left-color: #FF9800;
+  background: rgba(255, 152, 0, 0.07);
+
+  .metric-value {
+    color: #FF9800;
+  }
+}
+
+.metric-item.dr-unclassified {
+  border-left-color: #455A64;
+  background: rgba(69, 90, 100, 0.07);
+
+  .metric-value {
+    color: #455A64;
+  }
+}

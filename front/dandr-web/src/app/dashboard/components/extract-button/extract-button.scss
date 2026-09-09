@@ -1,0 +1,64 @@
+.extract-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.2rem;
+  height: 44px;
+  background: #FFFFFF;
+  color: #007BFF;
+  border: 1px solid #E0E5F2;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: #EBF5FF;
+    border-color: #007BFF;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    background: #D4E9FF;
+    border-color: #0056CC;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: #999999;
+  }
+
+  .button-text {
+    font-size: 0.85rem;
+  }
+
+  .download-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    stroke-width: 2.5;
+    flex-shrink: 0;
+  }
+
+  .spinner-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid rgba(0, 123, 255, 0.2);
+    border-top-color: #007BFF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

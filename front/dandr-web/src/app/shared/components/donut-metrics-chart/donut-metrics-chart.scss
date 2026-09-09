@@ -1,0 +1,159 @@
+.dmc-wrapper {
+  width: 100%;
+}
+
+/* Main 2-column layout */
+.dmc-layout {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* Left: cards grid — force 3 columns */
+.dmc-cards {
+  flex: 1;
+  min-width: 0;
+
+  ::ng-deep .metrics-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+
+  ::ng-deep .metric-item {
+    padding: 1.2rem 0.35rem !important;
+  }
+
+  ::ng-deep .metric-value {
+    font-size: 1.6rem !important;
+  }
+
+  ::ng-deep .metric-label {
+    font-size: 0.62rem !important;
+  }
+}
+
+/* Right: chart + dot legend side by side */
+.dmc-chart-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* Donut container with centered total overlay */
+.dmc-chart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ::ng-deep canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.dmc-total-center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+
+  .total-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1;
+  }
+
+  .total-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #9AA5B4;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 2px;
+  }
+}
+
+/* Dot legend */
+.dmc-dot-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dot-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.15rem 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-label {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #546E7A;
+  white-space: nowrap;
+}
+
+.dot-pct {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1A1A1A;
+  min-width: 42px;
+  text-align: right;
+}
+
+/* Loading */
+.dmc-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+
+  .spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #066fef;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    animation: spin 1s linear infinite;
+  }
+}
+
+.dmc-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+
+  p {
+    font-size: 0.9rem;
+    color: #9AA5B4;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

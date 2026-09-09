@@ -1,0 +1,38 @@
+<div class="fede-status-container">
+  <div class="fede-content">
+    <h2 class="page-title">FEDE Status</h2>
+
+    <!-- Loading and Error States -->
+    <div *ngIf="fedeRowLoading" class="loading-message">Loading data...</div>
+    <div *ngIf="fedeRowError" class="error-message">{{ fedeRowError }}</div>
+
+    <!-- Excel-style Table -->
+    <div *ngIf="fedeRows && fedeRows.length > 0 && !fedeRowLoading" class="table-container">
+      <table class="excel-table">
+        <thead>
+          <tr>
+            <th *ngFor="let col of getTableColumns()">{{ col }}</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of fedeRows; let even = even" [class.even]="even">
+            <td *ngFor="let col of getTableColumns()"
+                class="text-left"
+                [style.color]="getCellColor(col, getCellValue(row, col))">
+              {{ getCellValue(row, col) }}
+            </td>
+            <td class="text-center">
+              <a *ngIf="row.assessment_id_url" [href]="row.assessment_id_url" target="_blank" class="link-btn">Link</a>
+              <span *ngIf="!row.assessment_id_url" class="no-link">-</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="fedeRows && fedeRows.length === 0 && !fedeRowLoading && selectedDvpTeam" class="no-data-message">
+      No data was found for this DVP team.
+    </div>
+  </div>
+</div>

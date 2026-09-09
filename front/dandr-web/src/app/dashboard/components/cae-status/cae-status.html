@@ -1,0 +1,44 @@
+<div class="cae-status-container">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p class="loading-text">Loading data...</p>
+    <p class="loading-subtext">Please wait while we fetch your data</p>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading && caeChartData" class="cae-content">
+    <!-- Assessment Selector -->
+    <div class="assessment-selector" *ngIf="assessments.length > 1">
+      <label>Assessment:</label>
+      <select [(ngModel)]="selectedAssessment" (change)="onAssessmentChange(selectedAssessment!)">
+        <option *ngFor="let assessment of assessments" [value]="assessment">
+          {{ assessment }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Doughnut Chart -->
+    <div class="chart-wrapper">
+      <p-chart 
+        type="doughnut" 
+        [data]="caeChartData"
+        [options]="{ 
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                usePointStyle: true,
+                padding: 15,
+                font: { size: 12, weight: 500 }
+              }
+            }
+          }
+        }"
+      ></p-chart>
+    </div>
+  </div>
+
+</div>

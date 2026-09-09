@@ -1,0 +1,72 @@
+<div class="dvp-glidepath-container">
+
+  <div class="glidepath-header">
+    <span class="glidepath-title">DVP Glidepath</span>
+  </div>
+
+  <!-- LOADING STATE -->
+  <div *ngIf="isLoadingGlidepath" class="loading-state">
+    <app-loading-spinner></app-loading-spinner>
+    <p class="loading-text">Loading DVP Glidepath data...</p>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div *ngIf="!isLoadingGlidepath && errorMessage" class="error-state">
+    <div class="error-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
+    <p class="error-message">{{ errorMessage }}</p>
+    <button class="retry-button" (click)="loadGlidepathData()">Try Again</button>
+  </div>
+
+  <!-- CHART SECTION -->
+  <div *ngIf="!isLoadingGlidepath && !errorMessage && hasChartData" class="chart-section">
+    <div class="chart-wrapper">
+      <apx-chart
+        [series]="apexSeries"
+        [chart]="apexChart"
+        [xaxis]="apexXAxis"
+        [yaxis]="apexYAxis"
+        [colors]="apexColors"
+        [stroke]="apexStroke"
+        [dataLabels]="apexDataLabels"
+        [legend]="apexLegend"
+        [tooltip]="apexTooltip"
+        [fill]="apexFill"
+        [annotations]="apexAnnotations">
+      </apx-chart>
+    </div>
+
+    <!-- LEGEND SECTION -->
+    <div class="chart-legend">
+      <div class="legend-item">
+        <div class="legend-line scheduled"></div>
+        <span>Scheduled Finished</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line actual"></div>
+        <span>Actual Finished</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="!isLoadingGlidepath && !errorMessage && !hasChartData" class="empty-state">
+    <div class="empty-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"></line>
+        <line x1="12" y1="20" x2="12" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="14"></line>
+        <path d="M2 20h20"></path>
+      </svg>
+    </div>
+    <p class="empty-message">No DVP glidepath data available</p>
+    <p class="empty-submessage">Check back later or search a different vehicle program</p>
+  </div>
+
+</div>
+

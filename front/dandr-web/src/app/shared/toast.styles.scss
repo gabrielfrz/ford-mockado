@@ -1,0 +1,146 @@
+/* Custom Toast Styles */
+::ng-deep .custom-toast {
+  top: 80px !important;
+  right: 20px !important;
+  font-family: var(--ford-font-family) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+  border: none !important;
+  padding: 18px 24px !important;
+  margin-bottom: 12px !important;
+  backdrop-filter: blur(10px);
+  animation: slideInRight 0.3s ease-out;
+  font-family: var(--ford-font-family) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message-content {
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: var(--ford-font-family) !important;
+}
+
+::ng-deep .custom-toast .p-toast-summary {
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  color: white !important;
+  font-family: var(--ford-font-family) !important;
+}
+
+::ng-deep .custom-toast .p-toast-detail {
+  font-weight: 400 !important;
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  margin-top: 4px !important;
+  font-family: var(--ford-font-family) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message-text {
+  color: rgba(255, 255, 255, 0.95) !important;
+  margin-left: 0px !important;
+  font-family: var(--ford-font-family) !important;
+}
+
+/* Success Toast */
+::ng-deep .custom-toast .p-toast-message.p-toast-message-success {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-success .p-toast-summary {
+  color: white !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-success .p-toast-detail {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-success .p-toast-icon {
+  color: white !important;
+}
+
+/* Error Toast */
+::ng-deep .custom-toast .p-toast-message.p-toast-message-error {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-error .p-toast-summary {
+  color: white !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-error .p-toast-detail {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-error .p-toast-icon {
+  color: white !important;
+}
+
+/* Warning Toast */
+::ng-deep .custom-toast .p-toast-message.p-toast-message-warn {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-warn .p-toast-summary {
+  color: white !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-warn .p-toast-detail {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-warn .p-toast-icon {
+  color: white !important;
+}
+
+/* Info Toast */
+::ng-deep .custom-toast .p-toast-message.p-toast-message-info {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-info .p-toast-summary {
+  color: white !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-info .p-toast-detail {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+::ng-deep .custom-toast .p-toast-message.p-toast-message-info .p-toast-icon {
+  color: white !important;
+}
+
+/* Toast Icon */
+::ng-deep .custom-toast .p-toast-icon {
+  color: white !important;
+  font-size: 18px !important;
+  flex-shrink: 0 !important;
+}
+
+::ng-deep .custom-toast .p-toast-icon-close {
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin-left: 12px !important;
+  cursor: pointer !important;
+  transition: color 0.2s !important;
+}
+
+::ng-deep .custom-toast .p-toast-icon-close:hover {
+  color: white !important;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

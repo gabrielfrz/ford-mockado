@@ -1,0 +1,91 @@
+<!-- FIRST CONTAINER: DONUT CHART -->
+<div class="donut-chart-container">
+    <app-donut-metrics-chart
+      [isLoading]="isLoadingDonut"
+      [hasData]="hasDonutData"
+      [chartData]="donutChartData"
+      [chartOptions]="donutChartOptions"
+      [total]="totalItems"
+      totalLabel="Total"
+      [legendItems]="donutLegendItems"
+      [metricsData]="donutMetricsData"
+      [emptyMessage]="'No DPA5 data available'"
+      [chartSize]="260">
+    </app-donut-metrics-chart>
+</div>
+
+<!-- SECOND CONTAINER: GLIDEPATH -->
+<div class="glidepath-container">
+
+    <div class="glidepath-header">
+      <span class="glidepath-title">DPA5 Glidepath</span>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div *ngIf="isLoadingGlidepath" class="loading-state">
+      <app-loading-spinner></app-loading-spinner>
+      <p class="loading-text">Loading DPA5 Glidepath data...</p>
+    </div>
+
+    <!-- ERROR STATE -->
+    <div *ngIf="!isLoadingGlidepath && errorMessage" class="error-state">
+      <div class="error-icon">⚠</div>
+      <p class="error-message">{{ errorMessage }}</p>
+      <button class="retry-button" (click)="loadGlidepathData()">Try Again</button>
+    </div>
+
+    <!-- CHART SECTION -->
+    <div *ngIf="!isLoadingGlidepath && !errorMessage && hasChartData" class="chart-section">
+      <div class="chart-wrapper">
+        <apx-chart
+          [series]="apexSeries"
+          [chart]="apexChart"
+          [xaxis]="apexXAxis"
+          [yaxis]="apexYAxis"
+          [colors]="apexColors"
+          [stroke]="apexStroke"
+          [plotOptions]="apexPlotOptions"
+          [dataLabels]="apexDataLabels"
+          [legend]="apexLegend"
+          [tooltip]="apexTooltip"
+          [fill]="apexFill"
+          [annotations]="apexAnnotations">
+        </apx-chart>
+      </div>
+
+      <!-- LEGEND SECTION -->
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-color compliant"></div>
+          <span>Compliant</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color not-compliant"></div>
+          <span>Not Compliant</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color not-assessable"></div>
+          <span>Not Assessable</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-line assessment-goal"></div>
+          <span>Assessment Goal</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-line compliance-goal"></div>
+          <span>Compliance Goal</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-line compliance-prediction"></div>
+          <span>Compliance Prediction</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="!isLoadingGlidepath && !errorMessage && !hasChartData" class="empty-state">
+      <div class="empty-icon">📊</div>
+      <p class="empty-message">No DPA5 glidepath data available</p>
+      <p class="empty-submessage">Try adjusting your filters or check back later</p>
+    </div>
+</div>

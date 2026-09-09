@@ -1,0 +1,178 @@
+.dpa5-status-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 2rem;
+
+  .dpa5-page {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    // MAIN SECTION
+    .dpa5-main-section {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    // INFO SECTION
+    .info-section {
+      .summary-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+        .summary-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+          padding-bottom: 1rem;
+          border-bottom: 2px solid #e9ecef;
+
+          svg {
+            color: #007bff;
+          }
+
+          h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #212529;
+            margin: 0;
+          }
+        }
+
+        .summary-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1.5rem;
+
+          .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            .summary-label {
+              font-size: 0.85rem;
+              font-weight: 600;
+              color: #6c757d;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+
+            .summary-value {
+              font-size: 1.1rem;
+              font-weight: 600;
+              color: #212529;
+            }
+          }
+        }
+      }
+    }
+
+    // ACTIONS SECTION
+    .actions-section {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #212529;
+        margin: 0 0 1.5rem 0;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .action-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 1rem 1.5rem;
+          border: none;
+          border-radius: 8px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          .icon {
+            font-size: 1.25rem;
+          }
+
+          &.primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
+            }
+          }
+
+          &.secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 2px solid #dee2e6;
+
+            &:hover {
+              background: #e9ecef;
+              border-color: #adb5bd;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+        }
+      }
+    }
+  }
+}
+
+// RESPONSIVE DESIGN
+@media (max-width: 768px) {
+  .dpa5-status-container {
+    padding: 1rem;
+
+    .dpa5-page {
+      gap: 1rem;
+
+      .info-section {
+        .summary-card {
+          padding: 1.5rem;
+
+          .summary-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+        }
+      }
+
+      .actions-section {
+        padding: 1.5rem;
+
+        .action-buttons {
+          flex-direction: column;
+
+          .action-btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      }
+    }
+  }
+}

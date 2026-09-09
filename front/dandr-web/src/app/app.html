@@ -1,0 +1,108 @@
+<p-toast position="top-right" [baseZIndex]="1000" styleClass="custom-toast"></p-toast>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <img src="/fordlogo.png" alt="Ford Logo" class="sidebar-logo">
+    <span class="sidebar-title">Engineering Dashboard</span>
+  </div>
+
+  <div class="sidebar-content">
+    <div class="sidebar-section current-vehicle-section">
+      <h2>Current Vehicle Program</h2>
+      <p class="current-vehicle-value">{{ currentVehicleDisplay }}</p>
+      @if (currentVehicleDisplay === 'None') {
+        <p class="vehicle-selection-hint">Choose a vehicle program to enable the options.</p>
+      }
+    </div>
+
+    <div class="sidebar-section program-selection">
+
+      <!-- Select Milestone -->
+       <div class="form-group-sidebar" [class.sidebar-field-disabled]="activeChart === 'costs' || activeChart === 'dpa5'"
+         [title]="activeChart === 'costs' || activeChart === 'dpa5' ? 'Not available on this view' : ''">
+        <label>Select Milestone:</label>
+        <p-autoComplete
+          name="programNameSidebar"
+          [(ngModel)]="programMilestoneSidebar"
+          [suggestions]="filteredMilestonesSidebar"
+          (completeMethod)="filterMilestonesSidebar($event)"
+          [dropdown]="true"
+          field="label"
+          [placeholder]="currentVehicleDisplay !== 'None' && allMilestones.length === 0 ? 'N/A' : 'Milestone'"
+          class="autocomplete-sidebar"
+          panelStyleClass="autocomplete-panel-debug"
+          itemStyleClass="autocomplete-item-debug"
+          [disabled]="currentVehicleDisplay === 'None' || allMilestones.length === 0 || activeChart === 'costs' || activeChart === 'dpa5'"
+        ></p-autoComplete>
+      </div>
+      <!-- Select PMT Code -->
+      <!-- Note: PMT codes are mocked client-side for now; they will
+           come from a DVP backend service in the future. -->
+      <div class="form-group-sidebar">
+        <label>Select PMT Code:</label>
+        <p-autoComplete
+          placeholder="PMT Code"
+          class="autocomplete-sidebar"
+          [(ngModel)]="pmtCodeSidebar"
+          [suggestions]="filteredPmtCodes"
+          (completeMethod)="filterPmtCodes($event)"
+          (onSelect)="onPmtCodeSelect($event)"
+          (onClear)="onPmtCodeClear()"
+          [dropdown]="true"
+          field="label"
+          name="pmtCodeSidebar"
+          panelStyleClass="autocomplete-panel-debug"
+          itemStyleClass="autocomplete-item-debug"
+          [disabled]="currentVehicleDisplay === 'None'"
+        ></p-autoComplete>
+      </div>
+    </div>
+
+    <div class="sidebar-section deliverables-section">
+      <h2>Deliverables</h2>
+      <div class="deliverables-buttons">
+        <button class="deliverable-btn" [class.active]="activeChart === 'cae'"
+          [attr.aria-pressed]="activeChart === 'cae'" (click)="handleCAEStatus()"
+          [disabled]="currentVehicleDisplay === 'None'"><span>CAE Status</span></button>
+        <button class="deliverable-btn" [class.active]="activeChart === 'costs'"
+          [attr.aria-pressed]="activeChart === 'costs'" (click)="handleCostsStatus()"
+          [disabled]="currentVehicleDisplay === 'None'"><span>Costs Status</span></button>
+        <button class="deliverable-btn" [class.active]="activeChart === 'designRules'"
+          [attr.aria-pressed]="activeChart === 'designRules'" (click)="handleDesignRules()"
+          [disabled]="currentVehicleDisplay === 'None'"><span>Design Rules</span></button>
+        <button class="deliverable-btn" [class.active]="activeChart === 'dpa5'"
+          [attr.aria-pressed]="activeChart === 'dpa5'" (click)="handleDPA5Status()"
+          [disabled]="currentVehicleDisplay === 'None'"><span>DPA5 Status</span></button>
+        <button class="deliverable-btn" [class.active]="activeChart === 'dvp'"
+          [attr.aria-pressed]="activeChart === 'dvp'" (click)="handleDVPStatus()"
+          [disabled]="currentVehicleDisplay === 'None'"><span>DVP Status</span></button>
+        <button class="deliverable-btn" [class.active]="activeChart === 'hir'"
+          [attr.aria-pressed]="activeChart === 'hir'" (click)="handleHIRStatus()"
+          [disabled]="currentVehicleDisplay === 'None'"><span>HIR Status</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    @if (loginDisplay) {
+      <div class="sidebar-account-actions">
+        <span
+          class="user-initial"
+          [title]="userName"
+          [attr.aria-label]="'Signed in as ' + userName"
+        >{{ userInitial }}</span>
+        <button type="button" class="logout-btn" (click)="handleLogout()">
+          Reset demo
+        </button>
+      </div>
+    }
+  </div>
+</aside>
+
+<main class="content" [class.expanded]="!isSidebarVisible">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="footer" [class.expanded]="!isSidebarVisible">
+  <p>© 2026. Ford D&R Dashboard · DEMO — Synthetic data</p>
+</footer>

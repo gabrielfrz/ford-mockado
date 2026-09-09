@@ -1,0 +1,63 @@
+<div class="dpa5-status-container">
+  <!-- PAGE: DPA5 GLIDEPATH AND METRICS -->
+  <div class="dpa5-page">
+    <!-- MAIN GLIDEPATH CHART -->
+    <div class="dpa5-main-section">
+      <app-dpa5-metrics 
+        [giCode]="giCode" 
+        [selectedProgram]="selectedProgram">
+      </app-dpa5-metrics>
+    </div>
+
+    <!-- ADDITIONAL INFO SECTION -->
+    <div class="info-section" *ngIf="summaryData">
+      <div class="summary-card">
+        <div class="summary-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <h3>Project Information</h3>
+        </div>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span class="summary-label">GI Code</span>
+            <span class="summary-value">{{ giCode || 'N/A' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Program</span>
+            <span class="summary-value">{{ selectedProgram || 'N/A' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Vehicle Line</span>
+            <span class="summary-value">{{ summaryData.vehicleLine || 'N/A' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Status</span>
+            <span class="summary-value">{{ summaryData.status || 'Active' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="actions-section">
+      <h3>Quick Actions</h3>
+      <div class="action-buttons">
+        <button class="action-btn primary">
+          <span class="icon">📊</span>
+          Export Data
+        </button>
+        <button class="action-btn secondary">
+          <span class="icon">📄</span>
+          Generate Report
+        </button>
+        <button class="action-btn secondary">
+          <span class="icon">⚙️</span>
+          Settings
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
